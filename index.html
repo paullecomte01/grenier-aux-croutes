@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Grenier aux Croûtes</title>
+  <meta name="description" content="Galerie personnelle — carnets & fragments" />
+
+  <!-- ================================================
+       POLICES — Google Fonts
+       Pour changer la police d'affichage : remplacez "Cormorant+Garamond"
+       Pour changer la police de l'interface : remplacez "Courier+Prime"
+  ================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ================================================
+       VARIABLES — modifiez ici pour changer les couleurs
+       --col-dark      : couleur du header (fond sombre)
+       --col-bg        : couleur du corps de page (fond clair)
+       --col-card      : couleur des cartes
+       --col-accent    : couleur d'accentuation (rouille)
+       --col-text      : couleur du texte principal
+       --col-muted     : couleur du texte secondaire
+       --col-border    : couleur des bordures
+    ================================================ */
+    :root {
+      --col-dark:    #1a1610;
+      --col-bg:      #f0e9db;
+      --col-card:    #faf7f0;
+      --col-accent:  #c45c1a;
+      --col-text:    #1e1a12;
+      --col-muted:   #9a8e78;
+      --col-border:  #d8ccb8;
+      --col-kraft:   #e8dfc8;
+      --col-photo:   #111009;
+      --col-collage: #1e2c42;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-ui:      'Courier Prime', monospace;
+    }
+
+    /* ================================================
+       RESET & BASE
+    ================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--col-bg);
+      color: var(--col-text);
+      min-height: 100vh;
+    }
+
+    /* ================================================
+       HEADER & NAVIGATION
+       Pour changer le nom du site : modifiez le texte dans <h1>
+    ================================================ */
+    .site-header {
+      background: var(--col-dark);
+      border-bottom: 3px solid var(--col-accent);
+      padding: 24px 40px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 300;
+      font-style: italic;
+      color: #f0e9db;
+      letter-spacing: 0.02em;
+      margin-bottom: 3px;
+    }
+
+    .wordmark em {
+      color: var(--col-accent);
+      font-style: italic;
+    }
+
+    /* Pour changer le sous-titre : modifiez .tagline dans le HTML */
+    .tagline {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5a4e38;
+      margin-bottom: 18px;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid #2a2218;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 11px 20px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5a4e38;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .nav-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+
+    .nav-btn.active { color: var(--col-accent); border-bottom-color: var(--col-accent); }
+    .nav-btn:hover:not(.active) { color: #f0e9db; }
+
+    /* ================================================
+       CONTENU PRINCIPAL
+    ================================================ */
+    .main-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 40px;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ================================================
+       ONGLET RECHERCHE
+    ================================================ */
+    .search-wrap { margin-bottom: 16px; }
+
+    .search-bar {
+      display: flex;
+      border: 1px solid var(--col-border);
+      background: var(--col-card);
+    }
+
+    .search-bar input {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 13px 18px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--col-text);
+      letter-spacing: 0.04em;
+      outline: none;
+    }
+
+    .search-bar input::placeholder { color: #c8b89a; }
+
+    .search-bar button {
+      background: none;
+      border: none;
+      border-left: 1px solid var(--col-border);
+      padding: 13px 18px;
+      color: var(--col-accent);
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.15s;
+    }
+
+    .search-bar button:hover { background: rgba(196,92,26,0.08); }
+
+    /* Filtres par catégorie */
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    /* Pour ajouter un filtre : dupliquez un <button class="filter-tag"> dans le HTML */
+    .filter-tag {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--col-border);
+      color: var(--col-muted);
+      background: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-tag.active,
+    .filter-tag:hover { background: var(--col-accent); border-color: var(--col-accent); color: #faf7f0; }
+
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--col-border);
+    }
+
+    /* Grille de résultats */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    /* ================================================
+       CARTES D'ŒUVRES (utilisées dans Recherche & Grenier)
+       Pour ajouter une œuvre : dupliquez un <article class="oeuvre-card"> dans le HTML
+    ================================================ */
+    .oeuvre-card {
+      background: var(--col-card);
+      border: 1px solid var(--col-border);
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.18s, transform 0.18s;
+    }
+
+    .oeuvre-card:hover { border-color: var(--col-accent); transform: translateY(-2px); }
+
+    .oeuvre-thumb {
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--col-border);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fond selon le type d'œuvre */
+    .oeuvre-thumb.kraft    { background: var(--col-kraft); }
+    .oeuvre-thumb.photo    { background: var(--col-photo); }
+    .oeuvre-thumb.collage  { background: var(--col-collage); }
+
+    /* Quand une vraie image est chargée */
+    .oeuvre-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .oeuvre-card:hover .oeuvre-thumb img { transform: scale(1.04); }
+
+    .thumb-label {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.15);
+    }
+
+    .oeuvre-body { padding: 12px 14px; }
+
+    .oeuvre-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--col-text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .oeuvre-meta {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--col-muted);
+      margin-bottom: 8px;
+    }
+
+    .oeuvre-type {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1px solid var(--col-accent);
+      color: var(--col-accent);
+    }
+
+    /* ================================================
+       ONGLET MON GRENIER
+    ================================================ */
+    .grenier-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .grenier-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--col-text);
+    }
+
+    .grenier-sub {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--col-muted);
+      margin-bottom: 18px;
+    }
+
+    /* Barre décorative — orange sur fond sombre */
+    .accent-bar {
+      height: 2px;
+      background: var(--col-text);
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .accent-bar::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      width: 40px; height: 2px;
+      background: var(--col-accent);
+    }
+
+    /* Boutons de disposition */
+    .view-btns { display: flex; gap: 4px; }
+
+    .view-btn {
+      background: none;
+      border: 1px solid var(--col-border);
+      color: var(--col-muted);
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+
+    .view-btn.active { background: var(--col-dark); border-color: var(--col-dark); color: var(--col-accent); }
+
+    /* Grilles du grenier */
+    .oeuvres-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .oeuvres-grid.masonry { grid-template-columns: repeat(2, 1fr); }
+
+    .oeuvres-grid.masonry .oeuvre-card:nth-child(3n+2) .oeuvre-thumb { height: 210px; }
+
+    .oeuvres-grid.list { grid-template-columns: 1fr; }
+
+    .oeuvres-grid.list .oeuvre-card {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .oeuvres-grid.list .oeuvre-thumb {
+      width: 90px;
+      height: auto;
+      border-bottom: none;
+      border-right: 1px solid var(--col-border);
+      flex-shrink: 0;
+    }
+
+    /* Bouton d'ajout */
+    .add-card {
+      background: none;
+      border: 1px dashed var(--col-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      color: var(--col-border);
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      min-height: 160px;
+      width: 100%;
+      transition: all 0.18s;
+    }
+
+    .add-card:hover { border-color: var(--col-accent); color: var(--col-accent); }
+
+    .add-card svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+    /* ================================================
+       ONGLET MES THÈMES
+       Pour ajouter un thème : dupliquez un <section class="theme-block"> dans le HTML
+    ================================================ */
+    .themes-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .themes-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--col-text);
+    }
+
+    .themes-count {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+    }
+
+    .theme-block { margin-bottom: 28px; }
+
+    .theme-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .theme-name {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--col-text);
+      flex: 1;
+    }
+
+    .theme-count-label {
+      font-size: 9px;
+      color: var(--col-muted);
+    }
+
+    .unsub-btn {
+      background: none;
+      border: 1px solid var(--col-border);
+      font-family: var(--font-ui);
+      font-size: 8px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .unsub-btn:hover { border-color: var(--col-accent); color: var(--col-accent); }
+
+    /* Bande horizontale de miniatures */
+    .theme-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .strip-card {
+      background: var(--col-card);
+      border: 1px solid var(--col-border);
+      overflow: hidden;
+      transition: border-color 0.15s;
+      cursor: pointer;
+    }
+
+    .strip-card:hover { border-color: var(--col-accent); }
+
+    .strip-thumb {
+      height: 80px;
+      border-bottom: 1px solid var(--col-border);
+      overflow: hidden;
+    }
+
+    .strip-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .strip-thumb.kraft   { background: var(--col-kraft); }
+    .strip-thumb.photo   { background: var(--col-photo); }
+    .strip-thumb.collage { background: var(--col-collage); }
+
+    .strip-body { padding: 7px 9px; }
+
+    .strip-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-style: italic;
+      color: var(--col-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .strip-author {
+      font-size: 8px;
+      letter-spacing: 0.07em;
+      color: var(--col-muted);
+    }
+
+    .theme-sep {
+      border: none;
+      border-top: 1px solid var(--col-border);
+      margin: 24px 0;
+    }
+
+    /* ================================================
+       LIGHTBOX (affichage plein écran d'une œuvre)
+    ================================================ */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,16,10,0.94);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-inner {
+      background: var(--col-card);
+      border: 1px solid var(--col-border);
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .lightbox-img {
+      width: 55%;
+      background: var(--col-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .lightbox-img img { width: 100%; height: 100%; object-fit: contain; }
+
+    .lightbox-info {
+      flex: 1;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lightbox-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--col-text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .lightbox-meta {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--col-muted);
+      margin-bottom: 16px;
+    }
+
+    .lightbox-type {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border: 1px solid var(--col-accent);
+      color: var(--col-accent);
+      margin-bottom: 20px;
+    }
+
+    .lightbox-desc {
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--col-muted);
+      flex: 1;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: 1px solid #3a3020;
+      color: #a09070;
+      font-size: 18px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .lightbox-close:hover { border-color: var(--col-accent); color: var(--col-accent); }
+
+    /* ================================================
+       RESPONSIVE
+    ================================================ */
+    @media (max-width: 700px) {
+      .site-header { padding: 18px 20px 0; }
+      .main-content { padding: 24px 20px; }
+      .wordmark { font-size: 22px; }
+      .theme-strip { grid-template-columns: repeat(2, 1fr); }
+      .lightbox-inner { flex-direction: column; }
+      .lightbox-img { width: 100%; min-height: 220px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================================
+       HEADER — modifiez le nom et le sous-titre ici
+  ================================================ -->
+  <header class="site-header">
+    <h1 class="wordmark">Le Grenier aux <em>Croûtes</em></h1>
+    <p class="tagline">— carnets & fragments —</p>
+    <nav class="main-nav" role="navigation" aria-label="Navigation principale">
+      <button class="nav-btn" onclick="switchTab('recherche', 0)" aria-label="Onglet Recherche">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        Recherche
+      </button>
+      <button class="nav-btn active" onclick="switchTab('grenier', 1)" aria-label="Onglet Mon grenier">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg>
+        Mon grenier
+      </button>
+      <button class="nav-btn" onclick="switchTab('themes', 2)" aria-label="Onglet Mes thèmes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5a1 1 0 011-1h12a1 1 0 011 1v16l-7-3-7 3V5z"/></svg>
+        Mes thèmes
+      </button>
+    </nav>
+  </header>
+
+  <main class="main-content">
+
+    <!-- ================================================
+         ONGLET RECHERCHE
+    ================================================ -->
+    <section class="tab-panel" id="tab-recherche" role="tabpanel">
+      <div class="search-wrap">
+        <div class="search-bar">
+          <input type="search" id="search-input" placeholder="une œuvre, un artiste, un thème…" aria-label="Rechercher" />
+          <button onclick="doSearch()" aria-label="Lancer la recherche">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pour ajouter un filtre : ajoutez un <button class="filter-tag"> -->
+      <div class="filters" role="group" aria-label="Filtrer par type">
+        <button class="filter-tag active" onclick="setFilter(this)">Tout</button>
+        <button class="filter-tag" onclick="setFilter(this)">Fusain</button>
+        <button class="filter-tag" onclick="setFilter(this)">Photographie</button>
+        <button class="filter-tag" onclick="setFilter(this)">Poésie</button>
+        <button class="filter-tag" onclick="setFilter(this)">Collage</button>
+        <button class="filter-tag" onclick="setFilter(this)">Peinture</button>
+      </div>
+
+      <p class="section-label" id="results-count">6 résultats</p>
+
+      <div class="results-grid" id="results-grid">
+        <!-- Les résultats de recherche s'affichent ici dynamiquement -->
+        <!-- En version statique, ils reflètent les œuvres de votre grenier -->
+      </div>
+    </section>
+
+    <!-- ================================================
+         ONGLET MON GRENIER
+         Pour ajouter une œuvre : dupliquez un <article class="oeuvre-card">
+         et modifiez le titre, la date, le type, et ajoutez votre image
+    ================================================ -->
+    <section class="tab-panel active" id="tab-grenier" role="tabpanel">
+      <div class="grenier-header">
+        <h2 class="grenier-title">Mon grenier</h2>
+        <div class="view-btns" role="group" aria-label="Mode d'affichage">
+          <button class="view-btn active" onclick="setView('grid', this)" aria-label="Vue grille">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="view-btn" onclick="setView('masonry', this)" aria-label="Vue mosaïque">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="11"/><rect x="14" y="17" width="7" height="4"/></svg>
+          </button>
+          <button class="view-btn" onclick="setView('list', this)" aria-label="Vue liste">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <p class="grenier-sub">carnets ouverts — fragments accumulés</p>
+      <div class="accent-bar" aria-hidden="true"></div>
+
+      <div class="oeuvres-grid" id="oeuvres-grid">
+
+        <!-- ============================================
+             ŒUVRE 1 — modifiez titre, date, type, image
+             Pour utiliser votre image :
+             remplacez <div class="oeuvre-thumb kraft"> par
+             <div class="oeuvre-thumb">
+               <img src="images/votre-image.jpg" alt="Description" />
+             </div>
+        ============================================ -->
+        <article class="oeuvre-card" onclick="openLightbox('Profil pensif', '14 mars 2024', 'Fusain', 'Une étude de portrait au fusain sur papier kraft.')">
+          <div class="oeuvre-thumb kraft">
+            <!-- Remplacez par : <img src="images/profil-pensif.jpg" alt="Profil pensif" /> -->
+            <span class="thumb-label">fusain</span>
+          </div>
+          <div class="oeuvre-body">
+            <h3 class="oeuvre-title">Profil pensif</h3>
+            <p class="oeuvre-meta">14 mars 2024</p>
+            <span class="oeuvre-type">Fusain</span>
+          </div>
+        </article>
+
+        <!-- ŒUVRE 2 -->
+        <article class="oeuvre-card" onclick="openLightbox('Fragments bleus', '22 janv. 2024', 'Collage', 'Collage mixed media, papier et crayon sur fond bleu.')">
+          <div class="oeuvre-thumb collage">
+            <span class="thumb-label">collage</span>
+          </div>
+          <div class="oeuvre-body">
+            <h3 class="oeuvre-title">Fragments bleus</h3>
+            <p class="oeuvre-meta">22 janv. 2024</p>
+            <span class="oeuvre-type">Collage</span>
+          </div>
+        </article>
+
+        <!-- ŒUVRE 3 -->
+        <article class="oeuvre-card" onclick="openLightbox('Crête, tempête', '8 fév. 2024', 'Photographie', 'Photographie noir et blanc, massif alpin sous la tempête.')">
+          <div class="oeuvre-thumb photo">
+            <span class="thumb-label">photo</span>
+          </div>
+          <div class="oeuvre-body">
+            <h3 class="oeuvre-title">Crête, tempête</h3>
+            <p class="oeuvre-meta">8 fév. 2024</p>
+            <span class="oeuvre-type">Photographie</span>
+          </div>
+        </article>
+
+        <!-- ŒUVRE 4 -->
+        <article class="oeuvre-card" onclick="openLightbox('Portrait de Poe', '7 mars 2021', 'Craie & encre', 'Portrait à la craie blanche et encre sur papier kraft.')">
+          <div class="oeuvre-thumb kraft">
+            <span class="thumb-label">encre</span>
+          </div>
+          <div class="oeuvre-body">
+            <h3 class="oeuvre-title">Portrait de Poe</h3>
+            <p class="oeuvre-meta">7 mars 2021</p>
+            <span class="oeuvre-type">Craie & encre</span>
+          </div>
+        </article>
+
+        <!-- ŒUVRE 5 -->
+        <article class="oeuvre-card" onclick="openLightbox('Arbre dans la brume', '12 déc. 2023', 'Photographie', 'Arbre solitaire dans un paysage enneigé et brumeux.')">
+          <div class="oeuvre-thumb photo">
+            <span class="thumb-label">photo</span>
+          </div>
+          <div class="oeuvre-body">
+            <h3 class="oeuvre-title">Arbre dans la brume</h3>
+            <p class="oeuvre-meta">12 déc. 2023</p>
+            <span class="oeuvre-type">Photographie</span>
+          </div>
+        </article>
+
+        <!-- ŒUVRE 6 -->
+        <article class="oeuvre-card" onclick="openLightbox('L\'arbre doré', '3 oct. 2023', 'Peinture', 'Peinture acrylique sur fond bleu, arbre aux branches dorées.')">
+          <div class="oeuvre-thumb kraft">
+            <span class="thumb-label">peinture</span>
+          </div>
+          <div class="oeuvre-body">
+            <h3 class="oeuvre-title">L'arbre doré</h3>
+            <p class="oeuvre-meta">3 oct. 2023</p>
+            <span class="oeuvre-type">Peinture</span>
+          </div>
+        </article>
+
+        <!-- Bouton d'ajout — laissez-le toujours en dernier -->
+        <button class="add-card" onclick="alert('Pour ajouter une œuvre : dupliquez un bloc <article class=oeuvre-card> dans le fichier index.html')">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter une œuvre
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ================================================
+         ONGLET MES THÈMES
+         Pour ajouter un thème : dupliquez un <section class="theme-block">
+         Pour modifier le nombre d'abonnements : changez le texte dans .themes-count
+    ================================================ -->
+    <section class="tab-panel" id="tab-themes" role="tabpanel">
+      <div class="themes-header">
+        <h2 class="themes-title">Mes thèmes</h2>
+        <!-- Modifiez le nombre ici -->
+        <span class="themes-count">3 abonnements</span>
+      </div>
+
+      <!-- THÈME 1 -->
+      <div class="theme-block">
+        <div class="theme-row">
+          <span class="theme-name">Lumière & ombre</span>
+          <span class="theme-count-label">52 œuvres</span>
+          <button class="unsub-btn" onclick="unsubscribe(this)">Quitter</button>
+        </div>
+        <div class="theme-strip">
+          <div class="strip-card">
+            <div class="strip-thumb photo"></div>
+            <div class="strip-body"><p class="strip-title">Contre-jour</p><p class="strip-author">A. Klein</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb kraft"></div>
+            <div class="strip-body"><p class="strip-title">Clair-obscur</p><p class="strip-author">toi</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb photo"></div>
+            <div class="strip-body"><p class="strip-title">Noir absolu</p><p class="strip-author">L. Petit</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb kraft"></div>
+            <div class="strip-body"><p class="strip-title">Soir sur neige</p><p class="strip-author">B. Morel</p></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="theme-sep" />
+
+      <!-- THÈME 2 -->
+      <div class="theme-block">
+        <div class="theme-row">
+          <span class="theme-name">Portraits silencieux</span>
+          <span class="theme-count-label">28 œuvres</span>
+          <button class="unsub-btn" onclick="unsubscribe(this)">Quitter</button>
+        </div>
+        <div class="theme-strip">
+          <div class="strip-card">
+            <div class="strip-thumb kraft"></div>
+            <div class="strip-body"><p class="strip-title">Profil féminin</p><p class="strip-author">toi</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb collage"></div>
+            <div class="strip-body"><p class="strip-title">Méditation</p><p class="strip-author">C. Duval</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb kraft"></div>
+            <div class="strip-body"><p class="strip-title">Regard baissé</p><p class="strip-author">N. Léger</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb photo"></div>
+            <div class="strip-body"><p class="strip-title">Visage brumeux</p><p class="strip-author">P. Chant</p></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="theme-sep" />
+
+      <!-- THÈME 3 -->
+      <div class="theme-block">
+        <div class="theme-row">
+          <span class="theme-name">Paysages extrêmes</span>
+          <span class="theme-count-label">37 œuvres</span>
+          <button class="unsub-btn" onclick="unsubscribe(this)">Quitter</button>
+        </div>
+        <div class="theme-strip">
+          <div class="strip-card">
+            <div class="strip-thumb photo"></div>
+            <div class="strip-body"><p class="strip-title">Arête nord</p><p class="strip-author">toi</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb collage"></div>
+            <div class="strip-body"><p class="strip-title">Forêt tropicale</p><p class="strip-author">toi</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb photo"></div>
+            <div class="strip-body"><p class="strip-title">Tempête alpine</p><p class="strip-author">G. Arnaud</p></div>
+          </div>
+          <div class="strip-card">
+            <div class="strip-thumb kraft"></div>
+            <div class="strip-body"><p class="strip-title">Arbre seul</p><p class="strip-author">toi</p></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================================================
+       LIGHTBOX — s'ouvre au clic sur une œuvre
+  ================================================ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Détail de l'œuvre" onclick="closeLightboxOutside(event)">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fermer">✕</button>
+    <div class="lightbox-inner">
+      <div class="lightbox-img" id="lb-img">
+        <span style="font-size:11px;letter-spacing:0.1em;color:#3a3020;text-transform:uppercase;">image</span>
+      </div>
+      <div class="lightbox-info">
+        <h2 class="lightbox-title" id="lb-title">Titre</h2>
+        <p class="lightbox-meta" id="lb-meta">Date</p>
+        <span class="lightbox-type" id="lb-type">Type</span>
+        <p class="lightbox-desc" id="lb-desc">Description</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================
+       JAVASCRIPT — logique de navigation et interactions
+       Vous pouvez modifier les données des œuvres dans le tableau `oeuvres`
+  ================================================ -->
+  <script>
+    /* --- Navigation entre onglets --- */
+    function switchTab(id, idx) {
+      document.querySelectorAll('.tab-panel').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+      if (id === 'recherche') populateResults();
+    }
+
+    /* --- Disposition du grenier --- */
+    function setView(mode, btn) {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const grid = document.getElementById('oeuvres-grid');
+      grid.className = 'oeuvres-grid' + (mode !== 'grid' ? ' ' + mode : '');
+    }
+
+    /* --- Filtres --- */
+    function setFilter(el) {
+      document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      populateResults(el.textContent.trim());
+    }
+
+    /* --- Recherche --- */
+    function doSearch() {
+      const q = document.getElementById('search-input').value.trim();
+      populateResults('Tout', q);
+      switchTab('recherche', 0);
+    }
+
+    /* --- Peuplement des résultats depuis les œuvres du grenier --- */
+    function populateResults(filter, query) {
+      filter = filter || document.querySelector('.filter-tag.active')?.textContent.trim() || 'Tout';
+      const cards = document.querySelectorAll('#oeuvres-grid .oeuvre-card');
+      const grid = document.getElementById('results-grid');
+      grid.innerHTML = '';
+      let count = 0;
+      cards.forEach(card => {
+        const type = card.querySelector('.oeuvre-type')?.textContent || '';
+        const title = card.querySelector('.oeuvre-title')?.textContent || '';
+        const matchFilter = filter === 'Tout' || type.toLowerCase().includes(filter.toLowerCase());
+        const matchQuery = !query || title.toLowerCase().includes(query.toLowerCase()) || type.toLowerCase().includes(query.toLowerCase());
+        if (matchFilter && matchQuery) {
+          grid.appendChild(card.cloneNode(true));
+          count++;
+        }
+      });
+      document.getElementById('results-count').textContent = count + ' résultat' + (count > 1 ? 's' : '');
+    }
+
+    /* --- Lightbox --- */
+    function openLightbox(titre, date, type, desc) {
+      document.getElementById('lb-title').textContent = titre;
+      document.getElementById('lb-meta').textContent = date;
+      document.getElementById('lb-type').textContent = type;
+      document.getElementById('lb-desc').textContent = desc;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeLightboxOutside(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    /* --- Se désabonner d'un thème --- */
+    function unsubscribe(btn) {
+      const block = btn.closest('.theme-block');
+      const sep = block.nextElementSibling;
+      block.style.opacity = '0';
+      block.style.transition = 'opacity 0.3s';
+      setTimeout(() => {
+        block.remove();
+        if (sep && sep.classList.contains('theme-sep')) sep.remove();
+        const count = document.querySelectorAll('.theme-block').length;
+        document.querySelector('.themes-count').textContent = count + ' abonnement' + (count > 1 ? 's' : '');
+      }, 300);
+    }
+
+    /* Initialisation */
+    populateResults();
+  </script>
+
+</body>
+</html>
