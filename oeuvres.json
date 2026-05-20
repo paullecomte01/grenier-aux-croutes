@@ -3,7 +3,7 @@
     {
       "id": 1,
       "titre": "Profil pensif",
-      "fichier": "images/profil-pensif.jpg",
+      "fichier": "femme-fusain",
       "date": "14 mars 2024",
       "type": "Fusain",
       "description": "Une étude de portrait au fusain sur papier kraft.",
@@ -21,7 +21,7 @@
     {
       "id": 3,
       "titre": "Crête, tempête",
-      "fichier": "images/crete-tempete.jpg",
+      "fichier": "montagne-lumière",
       "date": "8 fév. 2024",
       "type": "Photographie",
       "description": "Photographie noir et blanc, massif alpin sous la tempête.",
@@ -39,7 +39,7 @@
     {
       "id": 5,
       "titre": "Arbre dans la brume",
-      "fichier": "images/arbre-brume.jpg",
+      "fichier": "arbre-neige",
       "date": "12 déc. 2023",
       "type": "Photographie",
       "description": "Arbre solitaire dans un paysage enneigé et brumeux.",
