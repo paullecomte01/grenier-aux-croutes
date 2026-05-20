@@ -1,0 +1,64 @@
+{
+  "oeuvres": [
+    {
+      "id": 1,
+      "titre": "Profil pensif",
+      "fichier": "images/profil-pensif.jpg",
+      "date": "14 mars 2024",
+      "type": "Fusain",
+      "description": "Une étude de portrait au fusain sur papier kraft.",
+      "themes": ["Portraits silencieux", "Lumière & ombre"]
+    },
+    {
+      "id": 2,
+      "titre": "Fragments bleus",
+      "fichier": "images/fragments-bleus.jpg",
+      "date": "22 janv. 2024",
+      "type": "Collage",
+      "description": "Collage mixed media, papier et crayon sur fond bleu.",
+      "themes": ["Portraits silencieux"]
+    },
+    {
+      "id": 3,
+      "titre": "Crête, tempête",
+      "fichier": "images/crete-tempete.jpg",
+      "date": "8 fév. 2024",
+      "type": "Photographie",
+      "description": "Photographie noir et blanc, massif alpin sous la tempête.",
+      "themes": ["Paysages extrêmes", "Lumière & ombre"]
+    },
+    {
+      "id": 4,
+      "titre": "Portrait de Poe",
+      "fichier": "images/portrait-poe.jpg",
+      "date": "7 mars 2021",
+      "type": "Craie & encre",
+      "description": "Portrait à la craie blanche et encre sur papier kraft.",
+      "themes": ["Portraits silencieux", "Lumière & ombre"]
+    },
+    {
+      "id": 5,
+      "titre": "Arbre dans la brume",
+      "fichier": "images/arbre-brume.jpg",
+      "date": "12 déc. 2023",
+      "type": "Photographie",
+      "description": "Arbre solitaire dans un paysage enneigé et brumeux.",
+      "themes": ["Paysages extrêmes"]
+    },
+    {
+      "id": 6,
+      "titre": "L'arbre doré",
+      "fichier": "images/arbre-dore.jpg",
+      "date": "3 oct. 2023",
+      "type": "Peinture",
+      "description": "Peinture acrylique sur fond bleu, arbre aux branches dorées.",
+      "themes": ["Lumière & ombre"]
+    }
+  ],
+
+  "themes": [
+    "Lumière & ombre",
+    "Portraits silencieux",
+    "Paysages extrêmes"
+  ]
+}

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Le Grenier aux Croûtes</title>
+  <meta name="description" content="Galerie personnelle — carnets & fragments" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ================================================
+       VARIABLES — modifiez les couleurs ici
+    ================================================ */
+    :root {
+      --col-dark:   #1a1610;
+      --col-bg:     #f0e9db;
+      --col-card:   #faf7f0;
+      --col-accent: #c45c1a;
+      --col-text:   #1e1a12;
+      --col-muted:  #9a8e78;
+      --col-border: #d8ccb8;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-ui:      'Courier Prime', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--col-bg);
+      color: var(--col-text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    .site-header {
+      background: var(--col-dark);
+      border-bottom: 3px solid var(--col-accent);
+      padding: 24px 40px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 300;
+      font-style: italic;
+      color: #f0e9db;
+      letter-spacing: 0.02em;
+      margin-bottom: 3px;
+    }
+
+    .wordmark em { color: var(--col-accent); font-style: italic; }
+
+    .tagline {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5a4e38;
+      margin-bottom: 18px;
+    }
+
+    .main-nav { display: flex; border-top: 1px solid #2a2218; }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 11px 20px;
+      font-family: var(--font-ui);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5a4e38;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .nav-btn.active { color: var(--col-accent); border-bottom-color: var(--col-accent); }
+    .nav-btn:hover:not(.active) { color: #f0e9db; }
+
+    /* CONTENU */
+    .main-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 40px;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+    /* RECHERCHE */
+    .search-bar {
+      display: flex;
+      border: 1px solid var(--col-border);
+      background: var(--col-card);
+      margin-bottom: 12px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 13px 18px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      color: var(--col-text);
+      letter-spacing: 0.04em;
+      outline: none;
+    }
+
+    .search-bar input::placeholder { color: #c8b89a; }
+
+    .search-bar button {
+      background: none;
+      border: none;
+      border-left: 1px solid var(--col-border);
+      padding: 13px 18px;
+      color: var(--col-accent);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+
+    .filter-tag {
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--col-border);
+      color: var(--col-muted);
+      background: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-tag.active, .filter-tag:hover {
+      background: var(--col-accent);
+      border-color: var(--col-accent);
+      color: #faf7f0;
+    }
+
+    .section-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--col-border);
+    }
+
+    /* GRILLE D'ŒUVRES */
+    .oeuvres-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    }
+
+    .oeuvres-grid.masonry { grid-template-columns: repeat(2, 1fr); }
+    .oeuvres-grid.masonry .oeuvre-card:nth-child(3n+2) .oeuvre-thumb { height: 220px; }
+    .oeuvres-grid.list { grid-template-columns: 1fr; }
+    .oeuvres-grid.list .oeuvre-card { display: flex; align-items: stretch; }
+    .oeuvres-grid.list .oeuvre-thumb { width: 100px; height: auto !important; border-bottom: none; border-right: 1px solid var(--col-border); flex-shrink: 0; }
+
+    .oeuvre-card {
+      background: var(--col-card);
+      border: 1px solid var(--col-border);
+      cursor: pointer;
+      overflow: hidden;
+      transition: border-color 0.18s, transform 0.18s;
+    }
+
+    .oeuvre-card:hover { border-color: var(--col-accent); transform: translateY(-2px); }
+
+    .oeuvre-thumb {
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--col-border);
+      overflow: hidden;
+      background: #e8dfc8;
+      position: relative;
+    }
+
+    .oeuvre-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .oeuvre-card:hover .oeuvre-thumb img { transform: scale(1.04); }
+
+    .thumb-placeholder {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #c8b89a;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .oeuvre-body { padding: 12px 14px; flex: 1; }
+
+    .oeuvre-title {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--col-text);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .oeuvre-meta {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--col-muted);
+      margin-bottom: 8px;
+    }
+
+    .oeuvre-type {
+      display: inline-block;
+      font-size: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border: 1px solid var(--col-accent);
+      color: var(--col-accent);
+      margin-bottom: 6px;
+    }
+
+    .oeuvre-themes { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+
+    .theme-pill {
+      font-size: 8px;
+      letter-spacing: 0.08em;
+      padding: 2px 7px;
+      background: #ede5d5;
+      color: var(--col-muted);
+      border-radius: 2px;
+    }
+
+    /* GRENIER HEADER */
+    .grenier-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .grenier-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--col-text);
+    }
+
+    .grenier-sub { font-size: 10px; letter-spacing: 0.08em; color: var(--col-muted); margin-bottom: 18px; }
+
+    .accent-bar { height: 2px; background: var(--col-text); margin-bottom: 24px; position: relative; }
+    .accent-bar::after { content: ''; position: absolute; left: 0; top: 0; width: 40px; height: 2px; background: var(--col-accent); }
+
+    .view-btns { display: flex; gap: 4px; }
+
+    .view-btn {
+      background: none;
+      border: 1px solid var(--col-border);
+      color: var(--col-muted);
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      transition: all 0.15s;
+    }
+
+    .view-btn.active { background: var(--col-dark); border-color: var(--col-dark); color: var(--col-accent); }
+
+    /* BOUTON AJOUT */
+    .add-card {
+      background: none;
+      border: 1px dashed var(--col-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: default;
+      color: var(--col-border);
+      font-family: var(--font-ui);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      min-height: 170px;
+      padding: 20px;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .add-card strong { color: var(--col-muted); display: block; margin-bottom: 4px; }
+
+    /* THÈMES */
+    .themes-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 24px; }
+
+    .themes-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--col-text);
+    }
+
+    .themes-count { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--col-muted); }
+
+    .theme-block { margin-bottom: 32px; }
+
+    .theme-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+
+    .theme-name-label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--col-text);
+      flex: 1;
+    }
+
+    .theme-count-badge { font-size: 9px; color: var(--col-muted); }
+
+    .theme-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .strip-card {
+      background: var(--col-card);
+      border: 1px solid var(--col-border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+
+    .strip-card:hover { border-color: var(--col-accent); }
+
+    .strip-thumb {
+      height: 80px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--col-border);
+      background: #e8dfc8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .strip-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .strip-body { padding: 7px 9px; }
+
+    .strip-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-style: italic;
+      color: var(--col-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .strip-type { font-size: 8px; letter-spacing: 0.07em; color: var(--col-muted); }
+
+    .theme-sep { border: none; border-top: 1px solid var(--col-border); margin: 24px 0; }
+
+    .empty-theme {
+      font-size: 11px;
+      color: var(--col-muted);
+      letter-spacing: 0.04em;
+      font-style: italic;
+      padding: 12px 0;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,16,10,0.94);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-inner {
+      background: var(--col-card);
+      border: 1px solid var(--col-border);
+      max-width: 820px;
+      width: 100%;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .lightbox-img {
+      width: 55%;
+      background: var(--col-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
+    }
+
+    .lightbox-img img { width: 100%; height: 100%; object-fit: contain; }
+
+    .lightbox-img .no-img {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #3a3020;
+    }
+
+    .lightbox-info { flex: 1; padding: 36px 30px; display: flex; flex-direction: column; }
+
+    .lightbox-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--col-text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .lightbox-meta { font-size: 10px; letter-spacing: 0.1em; color: var(--col-muted); margin-bottom: 14px; }
+    .lightbox-type { display: inline-block; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 9px; border: 1px solid var(--col-accent); color: var(--col-accent); margin-bottom: 16px; }
+    .lightbox-desc { font-size: 12px; line-height: 1.8; color: var(--col-muted); flex: 1; margin-bottom: 20px; }
+
+    .lightbox-themes { display: flex; flex-wrap: wrap; gap: 6px; }
+    .lightbox-theme-pill { font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; background: #ede5d5; color: var(--col-muted); }
+
+    .lightbox-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: none;
+      border: 1px solid #3a3020;
+      color: #a09070;
+      font-size: 16px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .lightbox-close:hover { border-color: var(--col-accent); color: var(--col-accent); }
+
+    /* CHARGEMENT */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .site-header { padding: 18px 20px 0; }
+      .main-content { padding: 24px 20px; }
+      .wordmark { font-size: 22px; }
+      .lightbox-inner { flex-direction: column; }
+      .lightbox-img { width: 100%; min-height: 220px; }
+      .lightbox { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <h1 class="wordmark">Le Grenier aux <em>Croûtes</em></h1>
+    <p class="tagline">— carnets & fragments —</p>
+    <nav class="main-nav">
+      <button class="nav-btn" onclick="switchTab('recherche',0)">
+        &#9906; Recherche
+      </button>
+      <button class="nav-btn active" onclick="switchTab('grenier',1)">
+        &#8962; Mon grenier
+      </button>
+      <button class="nav-btn" onclick="switchTab('themes',2)">
+        &#10064; Mes thèmes
+      </button>
+    </nav>
+  </header>
+
+  <main class="main-content">
+
+    <!-- ONGLET RECHERCHE -->
+    <section class="tab-panel" id="tab-recherche">
+      <div class="search-bar">
+        <input type="search" id="search-input" placeholder="une œuvre, un titre, un thème, un type…" />
+        <button onclick="doSearch()">&#9906;</button>
+      </div>
+      <div class="filters" id="type-filters">
+        <button class="filter-tag active" onclick="setFilter(this,'')">Tout</button>
+        <!-- Les filtres par type sont générés automatiquement -->
+      </div>
+      <p class="section-label" id="results-count">chargement…</p>
+      <div class="oeuvres-grid" id="results-grid"></div>
+    </section>
+
+    <!-- ONGLET MON GRENIER -->
+    <section class="tab-panel active" id="tab-grenier">
+      <div class="grenier-header">
+        <h2 class="grenier-title">Mon grenier</h2>
+        <div class="view-btns">
+          <button class="view-btn active" onclick="setView('',this)" title="Grille">&#9638;</button>
+          <button class="view-btn" onclick="setView('masonry',this)" title="Mosaïque">&#10022;</button>
+          <button class="view-btn" onclick="setView('list',this)" title="Liste">&#9776;</button>
+        </div>
+      </div>
+      <p class="grenier-sub">carnets ouverts — fragments accumulés</p>
+      <div class="accent-bar"></div>
+      <div class="oeuvres-grid" id="grenier-grid">
+        <div class="loading">chargement des œuvres…</div>
+      </div>
+    </section>
+
+    <!-- ONGLET MES THÈMES -->
+    <section class="tab-panel" id="tab-themes">
+      <div class="themes-header">
+        <h2 class="themes-title">Mes thèmes</h2>
+        <span class="themes-count" id="themes-count"></span>
+      </div>
+      <div id="themes-container">
+        <div class="loading">chargement des thèmes…</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div class="lightbox-inner">
+      <div class="lightbox-img" id="lb-img"></div>
+      <div class="lightbox-info">
+        <h2 class="lightbox-title" id="lb-title"></h2>
+        <p class="lightbox-meta" id="lb-meta"></p>
+        <span class="lightbox-type" id="lb-type"></span>
+        <p class="lightbox-desc" id="lb-desc"></p>
+        <div class="lightbox-themes" id="lb-themes"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================================================
+       DONNÉES — chargées depuis oeuvres.json
+    ================================================ */
+    let OEUVRES = [];
+    let THEMES  = [];
+    let currentFilter = '';
+    let currentSearch = '';
+
+    /* Chargement du fichier JSON */
+    fetch('oeuvres.json')
+      .then(r => r.json())
+      .then(data => {
+        OEUVRES = data.oeuvres;
+        THEMES  = data.themes;
+        init();
+      })
+      .catch(() => {
+        document.getElementById('grenier-grid').innerHTML =
+          '<p style="color:#c45c1a;font-size:11px;letter-spacing:0.06em;">Impossible de charger oeuvres.json — vérifiez que le fichier est bien dans votre dépôt.</p>';
+      });
+
+    function init() {
+      buildTypeFilters();
+      renderGrenier();
+      renderResults();
+      renderThemes();
+    }
+
+    /* ================================================
+       NAVIGATION
+    ================================================ */
+    function switchTab(id, idx) {
+      document.querySelectorAll('.tab-panel').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+    }
+
+    /* ================================================
+       VUE GRENIER
+    ================================================ */
+    function setView(mode, btn) {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const g = document.getElementById('grenier-grid');
+      g.className = 'oeuvres-grid' + (mode ? ' ' + mode : '');
+    }
+
+    function renderGrenier() {
+      const grid = document.getElementById('grenier-grid');
+      grid.innerHTML = '';
+      OEUVRES.forEach(o => grid.appendChild(makeCard(o)));
+      grid.appendChild(makeAddCard());
+    }
+
+    /* ================================================
+       RECHERCHE & FILTRES
+    ================================================ */
+    function buildTypeFilters() {
+      const types = [...new Set(OEUVRES.map(o => o.type))].sort();
+      const container = document.getElementById('type-filters');
+      types.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-tag';
+        btn.textContent = t;
+        btn.onclick = () => setFilter(btn, t);
+        container.appendChild(btn);
+      });
+    }
+
+    function setFilter(el, type) {
+      document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      currentFilter = type;
+      renderResults();
+    }
+
+    function doSearch() {
+      currentSearch = document.getElementById('search-input').value.trim().toLowerCase();
+      renderResults();
+      switchTab('recherche', 0);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('search-input');
+      if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+    });
+
+    function renderResults() {
+      const filtered = OEUVRES.filter(o => {
+        const matchType   = !currentFilter || o.type === currentFilter;
+        const matchSearch = !currentSearch ||
+          o.titre.toLowerCase().includes(currentSearch) ||
+          o.type.toLowerCase().includes(currentSearch) ||
+          (o.description && o.description.toLowerCase().includes(currentSearch)) ||
+          (o.themes && o.themes.some(t => t.toLowerCase().includes(currentSearch)));
+        return matchType && matchSearch;
+      });
+
+      const grid = document.getElementById('results-grid');
+      grid.innerHTML = '';
+      filtered.forEach(o => grid.appendChild(makeCard(o)));
+
+      const n = filtered.length;
+      document.getElementById('results-count').textContent =
+        n + ' résultat' + (n > 1 ? 's' : '');
+    }
+
+    /* ================================================
+       THÈMES
+    ================================================ */
+    function renderThemes() {
+      const container = document.getElementById('themes-container');
+      container.innerHTML = '';
+      document.getElementById('themes-count').textContent =
+        THEMES.length + ' thème' + (THEMES.length > 1 ? 's' : '');
+
+      THEMES.forEach((theme, i) => {
+        const oeuvresDuTheme = OEUVRES.filter(o => o.themes && o.themes.includes(theme));
+
+        const block = document.createElement('div');
+        block.className = 'theme-block';
+
+        const row = document.createElement('div');
+        row.className = 'theme-row';
+        row.innerHTML = `
+          <span class="theme-name-label">${theme}</span>
+          <span class="theme-count-badge">${oeuvresDuTheme.length} œuvre${oeuvresDuTheme.length > 1 ? 's' : ''}</span>
+        `;
+
+        const strip = document.createElement('div');
+        strip.className = 'theme-strip';
+
+        if (oeuvresDuTheme.length === 0) {
+          strip.innerHTML = '<p class="empty-theme">Aucune œuvre dans ce thème pour le moment.</p>';
+        } else {
+          oeuvresDuTheme.forEach(o => strip.appendChild(makeStripCard(o)));
+        }
+
+        block.appendChild(row);
+        block.appendChild(strip);
+        container.appendChild(block);
+
+        if (i < THEMES.length - 1) {
+          const sep = document.createElement('hr');
+          sep.className = 'theme-sep';
+          container.appendChild(sep);
+        }
+      });
+    }
+
+    /* ================================================
+       CONSTRUCTION DES CARTES
+    ================================================ */
+    function makeCard(o) {
+      const card = document.createElement('article');
+      card.className = 'oeuvre-card';
+      card.onclick = () => openLightbox(o);
+
+      const thumb = document.createElement('div');
+      thumb.className = 'oeuvre-thumb';
+
+      if (o.fichier) {
+        const img = document.createElement('img');
+        img.src = o.fichier;
+        img.alt = o.titre;
+        img.onerror = () => {
+          img.remove();
+          thumb.innerHTML = `<span class="thumb-placeholder">${o.type}</span>`;
+        };
+        thumb.appendChild(img);
+      } else {
+        thumb.innerHTML = `<span class="thumb-placeholder">${o.type}</span>`;
+      }
+
+      const pillsHtml = (o.themes || [])
+        .map(t => `<span class="theme-pill">${t}</span>`).join('');
+
+      const body = document.createElement('div');
+      body.className = 'oeuvre-body';
+      body.innerHTML = `
+        <h3 class="oeuvre-title">${o.titre}</h3>
+        <p class="oeuvre-meta">${o.date}</p>
+        <span class="oeuvre-type">${o.type}</span>
+        <div class="oeuvre-themes">${pillsHtml}</div>
+      `;
+
+      card.appendChild(thumb);
+      card.appendChild(body);
+      return card;
+    }
+
+    function makeStripCard(o) {
+      const card = document.createElement('div');
+      card.className = 'strip-card';
+      card.onclick = () => openLightbox(o);
+
+      const thumb = document.createElement('div');
+      thumb.className = 'strip-thumb';
+
+      if (o.fichier) {
+        const img = document.createElement('img');
+        img.src = o.fichier;
+        img.alt = o.titre;
+        img.onerror = () => img.remove();
+        thumb.appendChild(img);
+      }
+
+      card.innerHTML = '';
+      card.appendChild(thumb);
+      card.innerHTML += `
+        <div class="strip-body">
+          <p class="strip-title">${o.titre}</p>
+          <p class="strip-type">${o.type}</p>
+        </div>
+      `;
+      return card;
+    }
+
+    function makeAddCard() {
+      const btn = document.createElement('div');
+      btn.className = 'add-card';
+      btn.innerHTML = `
+        <strong>+ Ajouter une œuvre</strong>
+        Éditez le fichier oeuvres.json<br>dans votre dépôt GitHub
+      `;
+      return btn;
+    }
+
+    /* ================================================
+       LIGHTBOX
+    ================================================ */
+    function openLightbox(o) {
+      const imgZone = document.getElementById('lb-img');
+      imgZone.innerHTML = '';
+
+      if (o.fichier) {
+        const img = document.createElement('img');
+        img.src = o.fichier;
+        img.alt = o.titre;
+        img.onerror = () => { imgZone.innerHTML = '<span class="no-img">' + o.type + '</span>'; };
+        imgZone.appendChild(img);
+      } else {
+        imgZone.innerHTML = '<span class="no-img">' + o.type + '</span>';
+      }
+
+      document.getElementById('lb-title').textContent = o.titre;
+      document.getElementById('lb-meta').textContent  = o.date;
+      document.getElementById('lb-type').textContent  = o.type;
+      document.getElementById('lb-desc').textContent  = o.description || '';
+      document.getElementById('lb-themes').innerHTML  =
+        (o.themes || []).map(t => `<span class="lightbox-theme-pill">${t}</span>`).join('');
+
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeLightboxOutside(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>
